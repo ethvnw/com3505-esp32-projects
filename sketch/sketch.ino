@@ -4,18 +4,22 @@
 #include <Arduino.h>
 #include <esp_log.h>
 
-// to blink or not to blink...
 bool doBlinking = true;
 char MAC_ADDRESS[13];
+#define LED_PIN 6
+#define SWITCH_PIN 5
 
 
 void setup() {
   Serial.begin(115200);
   Serial.println("arduino started");
-  pinMode(LED_BUILTIN, OUTPUT);
+
+  // pinMode(LED_BUILTIN, OUTPUT);
+  pinMode(LED_PIN, OUTPUT);
+  pinMode(SWITCH_PIN, INPUT_PULLUP);
 
   getMAC(MAC_ADDRESS);
-} // setup
+}
 
 void getMAC(char *buf) { // the MAC is 6 bytes, so needs careful conversion...
   uint64_t mac = ESP.getEfuseMac(); // ...to string (high 2, low 4):
@@ -30,11 +34,26 @@ void getMAC(char *buf) { // the MAC is 6 bytes, so needs careful conversion...
   buf[12] = '\0';
 }
 
+
 void loop() {
   Serial.printf("\nahem, hello (merged bin) world\n");
   Serial.printf("MAC Address: %s\n", MAC_ADDRESS);
 
-  #ifdef ESP_IDF_VERSION_MAJOR
+  if(digitalRead(SWITCH_PIN) == LOW) {
+    Serial.printf("Switch is pressed!!!!!");
+  }
+
+  if(doBlinking) {
+    digitalWrite(LED_PIN, HIGH);
+    delay(500);
+    digitalWrite(LED_PIN, LOW);
+    delay(500);
+  }
+}
+
+
+void printinfo() {
+#ifdef ESP_IDF_VERSION_MAJOR
     Serial.printf( // IDF version
       "IDF version: %d.%d.%d\n",
       ESP_IDF_VERSION_MAJOR, ESP_IDF_VERSION_MINOR, ESP_IDF_VERSION_PATCH
@@ -80,11 +99,4 @@ void loop() {
   #ifdef ARDUINO_SERIAL_PORT
     Serial.printf("ARDUINO_SERIAL_PORT=%d\n", ARDUINO_SERIAL_PORT);
   #endif
-
-  if(doBlinking) {
-    digitalWrite(LED_BUILTIN, HIGH);
-    delay(2000);
-    digitalWrite(LED_BUILTIN, LOW);
-    delay(2000);
-  }
-} // loop
+}
