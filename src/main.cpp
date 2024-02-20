@@ -1,6 +1,8 @@
 #include <Arduino.h>
 
-#define LED_PIN 6
+#define RED 6
+#define YELLOW 9
+#define GREEN 10
 #define SWITCH_PIN 5
 char MAC_ADDRESS[13];
 
@@ -21,7 +23,10 @@ void getMAC(char *buf) { // the MAC is 6 bytes, so needs careful conversion...
 
 void setup() {
   Serial.begin(115200);
-  pinMode(LED_PIN, OUTPUT);
+  pinMode(RED, OUTPUT);
+  pinMode(YELLOW, OUTPUT);
+  pinMode(GREEN, OUTPUT);
+
   pinMode(SWITCH_PIN, INPUT_PULLUP);
 
   getMAC(MAC_ADDRESS);
@@ -32,11 +37,26 @@ void loop() {
   Serial.printf("MAC Address: %s\n", MAC_ADDRESS);
 
   if (digitalRead(SWITCH_PIN) == LOW) {
-    Serial.println("Button pressed!");
-  }
+    Serial.println("Switch is pressed");
+    digitalWrite(RED, HIGH);
+    digitalWrite(YELLOW, LOW);
+    digitalWrite(GREEN, LOW);
+    delay(1000);
 
-  digitalWrite(LED_PIN, HIGH);
-  delay(500);
-  digitalWrite(LED_PIN, LOW);
-  delay(1000);
+    digitalWrite(RED, LOW);
+    digitalWrite(YELLOW, HIGH);
+    digitalWrite(GREEN, LOW);
+    delay(1000);
+
+    digitalWrite(RED, LOW);
+    digitalWrite(YELLOW, LOW);
+    digitalWrite(GREEN, HIGH);
+    delay(1000);
+
+    digitalWrite(RED, LOW);
+    digitalWrite(YELLOW, LOW);
+    digitalWrite(GREEN, LOW);
+  } 
+
+  
 }
