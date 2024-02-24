@@ -3,8 +3,8 @@
 
 #include <main.h>
 
-const char *ssid = "ethan esp32";
-const char *password = "ethan";
+const char *ssid = "ethn wifi";
+const char *password = "123456789";
 WebServer server(80);
 
 void getIndex() {
