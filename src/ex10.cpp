@@ -6,7 +6,10 @@
 #define FIRMWARE_IP "192.168.207.2"
 #define FIRMWARE_PORT "8000"
 
+bool updateAvailable = false;
+int newFirmwareVersion;
 int percentLength = 0;
+
 
 int cloudGet(HTTPClient *http, String file) {
     String url = "http://" + String(FIRMWARE_IP) + ":" + String(FIRMWARE_PORT) + "/" + file;
@@ -15,6 +18,7 @@ int cloudGet(HTTPClient *http, String file) {
     http->addHeader("User-Agent", "ESP32");
     return http->GET();
 }
+
 
 void handleOTAProgress(size_t done, size_t total) {
     float progress = (float) done / (float) total;
@@ -34,40 +38,10 @@ void handleOTAProgress(size_t done, size_t total) {
         Serial.println("");
 }
 
-void setup10() {
-    delay(3000);
-    Serial.printf("Running firmware on version %d\n", FIRMWARE_VERSION);
 
-    WiFi.begin("MAFair", "1357913579");
-    Serial.print("Connecting to WiFi");
-    while (WiFi.status() != WL_CONNECTED) {
-        Serial.print(".");
-        delay(500);
-    }
-    Serial.println("\nConnected to WiFi");
-
+void startOTA() {
     HTTPClient http;
-    int highestVersion;;
-    int versionResponseCode = cloudGet(&http, "version");
-    
-    if (versionResponseCode == 200) {
-        highestVersion = http.getString().toInt();
-        Serial.printf("Cloud version is %d\n", highestVersion);
-
-    } else 
-        Serial.printf("Failed to get cloud version (code %d)\n", versionResponseCode);
-    http.end();
-
-    if (versionResponseCode < 0)
-        return;
-
-    else if (FIRMWARE_VERSION >= highestVersion) {
-        Serial.println("Firmware is up to date");
-        return;
-    }
-
-    Serial.printf("Firmware update available (%d -> %d)\n", FIRMWARE_VERSION, highestVersion);
-    String firmwareName = String(highestVersion) + ".bin";
+    String firmwareName = String(newFirmwareVersion) + ".bin";
     int firmwareResponseCode = cloudGet(&http, firmwareName);
     int updateLength = http.getSize();
 
@@ -75,7 +49,7 @@ void setup10() {
         Serial.printf("Firmware size is %d\n", updateLength);
 
     } else  {
-        Serial.printf("Failed to get firmware (code %d)\n", versionResponseCode);
+        Serial.printf("Failed to get firmware (code %d)\n", firmwareResponseCode);
         http.end();
         return;
     }
@@ -110,7 +84,53 @@ void setup10() {
     stream.flush();
 }
 
+
+void setup10() {
+    delay(3000);
+    Serial.printf("Running firmware on version %d\n", FIRMWARE_VERSION);
+
+    WiFi.begin("MAFair", "1357913579");
+    Serial.print("Connecting to WiFi");
+    while (WiFi.status() != WL_CONNECTED) {
+        Serial.print(".");
+        delay(500);
+    }
+    Serial.println("\nConnected to WiFi");
+
+    HTTPClient http;
+    int highestVersion;;
+    int versionResponseCode = cloudGet(&http, "version");
+    
+    if (versionResponseCode == 200) {
+        highestVersion = http.getString().toInt();
+        Serial.printf("Cloud version is %d\n", highestVersion);
+
+    } else 
+        Serial.printf("Failed to get cloud version (code %d)\n", versionResponseCode);
+    http.end();
+
+    if (versionResponseCode < 0)
+        return;
+
+    else if (FIRMWARE_VERSION >= highestVersion) {
+        Serial.println("Firmware is up to date");
+        return;
+    }
+    http.end();
+
+    Serial.printf("Firmware update available (%d -> %d)\n", FIRMWARE_VERSION, highestVersion);
+    Serial.println("Touch the sensor to start the update");
+    updateAvailable = true;
+    newFirmwareVersion = highestVersion;
+
+}
+
 void loop10() {
+    if (updateAvailable && touchRead(T6) > 80000) {
+        Serial.println("Touch detected, starting update");
+        startOTA();
+    }
+
+    Serial.println("Looping...");
     delay(1000);
-    Serial.println("Looping");
 }
