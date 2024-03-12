@@ -12,6 +12,7 @@ void setup03(); void loop03();
 void setup04(); void loop04();
 void setup06(); void loop06();
 void setup10(); void loop10();
+void setupWebhook(); void loopWebhook();
 
 // Ex01
 extern char MAC_ADDRESS[];

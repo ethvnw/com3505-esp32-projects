@@ -6,7 +6,7 @@
 int FIRMWARE_VERSION = 1;
 
 // Controls the exercise to run
-int EX = 10;
+int EX = 99;
 
 void setup() {
   Serial.begin(115200);
@@ -18,6 +18,7 @@ void setup() {
     case  4: setup04(); break;
     case  6: setup06(); break;
     case 10: setup10(); break;
+    case 99: setupWebhook(); break;
   }
 }
 
@@ -29,5 +30,6 @@ void loop() {
     case  4: loop04(); break;
     case  6: loop06(); break;
     case 10: loop10(); break;
+    case 99: loopWebhook(); break;
   }
 }
