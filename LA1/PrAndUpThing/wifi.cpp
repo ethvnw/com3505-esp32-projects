@@ -95,6 +95,7 @@ void setupWiFi() {
     server.onNotFound(handle_NotFound);
     server.begin();
 
+    delay(4000);
     Serial.println("Visit 192.168.4.1 to connect to a WiFi network");
     while (WiFi.status() != WL_CONNECTED) {
         Serial.println("Waiting for a WiFi Connection...");
