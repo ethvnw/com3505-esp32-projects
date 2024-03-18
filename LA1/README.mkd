@@ -1,8 +1,41 @@
-
 # COM3505 Lab Assessment 1
 
-Put your documentation here. 
+## Video of System In Use
+Available on youtube at https://www.youtube.com/watch?v=JpJkHWHirBM.
 
-Put your code in [PrAndUpThing/PrAndUpThing.ino](PrAndUpThing/PrAndUpThing.ino).
+## Hardware
+### Provisioning
+There are two LEDS to indicate notifications from the system. The yellow LED indicates action is required: when it is waiting for a WiFI connection, it blinks. The green LED is used to indicate a successful WiFi connection. When it is connected, this remains on, and the yellow LED stops blinking. 
 
-See [the rubric](rubric.mkd) for more details.
+### Updating
+The array of five LEDS are used to visualise the progress of the update process. Each LED represents a portion of the update progess (20%). When the update is complete, all the LEDS are on, and they then flash repeatedly to indicate that the update is complete. 
+
+The touch sensor (blue wire) is used to control the update process. When the touch sensor is touched, the update process is initiated. If it is not touched, the device remains in normal operation.
+
+### Photo of Hardware
+![](hardware_photo.jpg)
+
+## Software
+### Provisioning
+The [wifi.cpp](PrAndUpThing/wifi.cpp) file handles the connection to a WiFi network. Until there is a connection, the device remains in a loop: blinking the aforementioned LED and prints to serial, indicating that it is waiting for a connection. If an incorrect password is entered, or five seconds has elapsed, it prints to serial stating it could not connect and remains in the loop. If the connection is successful, a message is printed to serial.
+
+### Updating
+On connection to a network, the setup function in [ota.cpp](PrAndUpThing/ota.cpp) is called. This functions gets the latest version from the Python HTTP server and compares to the current version stored in the variable. If the versions are different, a message is printed to serial and the user is notified the device is waiting for touch input to begin the process. The LED progress bar is controlled via the `handleOTAProgress` function. 
+
+### Libraries used
+- Arduino.h
+- WiFi.h
+- WebServer.h
+- HTTPClient.h
+- Update.h
+
+### Testing
+The device was tested with a local WiFi network and a Python HTTP server. The server was used to host the update file. The device was tested with the following scenarios:
+- Correct WiFi password : The green LED turns on and the device prints to serial that it is connected to the network.
+- Incorrect WiFi password : The device prints to serial that it could not connect to the network.
+- No WiFi connection : The yellow LED blinks and the device prints to serial that it is waiting for a connection.
+- Successful touch input : The device prints to serial that OTA is beginning and the LED progress bar updates.
+- Unsuccessful OTA : The device prints to serial that OTA failed to begin.
+- No touch input : The device remains in normal operation. Waiting for touch input is printed to serial.
+- Successful update : The LEDS flash and the device prints to serial that the update is complete.
+- Unsuccessful update : The device prints to serial that it could not update.
