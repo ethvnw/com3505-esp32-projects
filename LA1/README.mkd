@@ -20,6 +20,8 @@ The touch sensor (blue wire) is used to control the update process. When the tou
 The [wifi.cpp](PrAndUpThing/wifi.cpp) file handles the connection to a WiFi network. Until there is a connection, the device remains in a loop: blinking the aforementioned LED and prints to serial, indicating that it is waiting for a connection. If an incorrect password is entered, or five seconds has elapsed, it prints to serial stating it could not connect and remains in the loop. If the connection is successful, a message is printed to serial.
 
 ### Updating
+**Updates are fetched from a locally hosted server with the IP address: 192.168.207.2, and port: 8000.**
+
 On connection to a network, the setup function in [ota.cpp](PrAndUpThing/ota.cpp) is called. This functions gets the latest version from the Python HTTP server and compares to the current version stored in the variable. If the versions are different, a message is printed to serial and the user is notified the device is waiting for touch input to begin the process. The LED progress bar is controlled via the `handleOTAProgress` function. 
 
 ### Libraries used
