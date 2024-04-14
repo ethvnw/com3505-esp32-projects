@@ -1,0 +1,47 @@
+
+Hello Ethan Watts!
+
+My records state that you're in a pair.
+Your pair partner is mtkhan1@sheffield.ac.uk
+(If this is incorrect please get in touch!)
+
+We've reviewed your COM3505 assessment 1 from
+https://gitlab.com/ethvnw/com3505-student-2024
+
+Congratulations, you've passed!
+
+As you know, we don't provide marks for this part of the course
+assessment, but if we _were_ doing so, we would estimate your work to
+be somewhere in the 3rd quartile.
+
+That's reasonable :)
+
+Some feedback:
+
+Your project for the IoT course demonstrates a good understanding of both
+network provisioning and implementing over-the-air (OTA) updates using the
+ESP32. You've structured your code and documentation to clearly address the
+rubric requirements, making your project robust and well-documented.
+
+Your use of LEDs to indicate different stages of WiFi connection and OTA
+updates is in line with the assignment's requirements. The touch sensor
+implementation as a trigger for OTA updates is a creative approach and
+effectively uses the ESP32's capabilities. This not only adheres to the rubric
+but enhances the usability and interactivity of your device.
+
+The documentation, including the embedded video link, hardware photos, and
+detailed software descriptions, provides a good view of your project, making
+it easy to understand and replicate. Your inclusion of testing scenarios in
+the documentation shows thoroughness in your testing process, which is crucial
+for real-world applications.
+
+The documentation is fairly brief, and might benefit from additional detail
+and/or narrative structure.
+
+The touch sensor threshold (`touchRead(T14) > 80000`) is presumably chosen for
+consistent responsiveness. It might be helpful to explain your choice of
+threshold in the documentation to clarify its purpose and functionality.
+
+Overall, your project meets the rubric's criteria effectively with a
+clear demonstration of required skills and thoughtful documentation.
+Well done!
