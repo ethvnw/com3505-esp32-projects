@@ -121,7 +121,7 @@ Enhancements to the RoboCar can be made in the following ways:
 
 Adafruit (2024). "Mini 3-Layer Round Robot Chassis Kit". Adafruit. https://www.adafruit.com/product/3244
 
-O'Brien-Carelli, C. (2024). "Tri-Layer Mini Round Robot Chassis Kit". Adafruit. https://learn.adafruit.com/tri-layer-mini-round-robot-chassis-kit?view=all#
+O'Brien-Carelli, J. (2024). "Tri-Layer Mini Round Robot Chassis Kit". Adafruit. https://learn.adafruit.com/tri-layer-mini-round-robot-chassis-kit?view=all#
 
 Cooper, T. (2024). "AdaBox 002". Adafruit. https://learn.adafruit.com/adabox002/assembling-your-robot
 
