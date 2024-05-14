@@ -2,11 +2,12 @@
 
 ## Introduction
 
-This project is about building a robot car using ESP32. The robot car is equipped with an ultrasonic sensor to detect obstacles. The robot car can be controlled using a web interface that is hosted on the esp web server. The robot car has a green LED to signify that the robot car has no obstacles in front of it and is safe to move forward. The robot car has a red LED to signify that the robot car has obstacles in front of it and is not safe to move forward. The robot car has a buzzer to give an audible alert when the robot car is too close to an obstacle.
+This project is about building a robot car using ESP32. The robot car is equipped with an ultrasonic sensor to detect obstacles. The robot car can be controlled using a web interface that is hosted on the esp web server. The robot car has a green LED to signify that the robot car has no obstacles in front of it and is safe to move forward. The robot car has a red LED to signify that the robot car has obstacles in front of it and is not safe to move forward. 
+<!-- The robot car has a buzzer to give an audible alert when the robot car is too close to an obstacle. -->
 
 ## Working RoboCar
 
-The images and video below shows a working RoboCar with obstacle detection and visual and sound output.
+The images and video below shows a working RoboCar with obstacle detection and visual outputs.
 
 <p align="center">
     <img src="./imgs/top.jpg" width="49%" />
@@ -21,25 +22,106 @@ The images and video below shows a working RoboCar with obstacle detection and v
 - "4 x AA Battery Holder with On/Off Switch" (https://www.adafruit.com/product/830)
 - "Alkaline AA batteries (LR6) - 4 pack" (https://www.adafruit.com/product/3349)
 - "DC Motor + Stepper Feather Wing Add-on For All Feather Boards" (https://www.adafruit.com/product/2927)
+- "Stacking Headers for Feather - 12-pin and 16-pin female headers" (https://www.adafruit.com/product/2830) (optional)
 - "3 x AA Battery Holder with On/Off Switch and 2-Pin JST" (https://www.adafruit.com/product/727)
   For operating the robot car without the USB
 - "Alkaline AAA batteries - 3 pack" (https://www.adafruit.com/product/3520)
 - "Ultrasonic Distance Sensor - 3V or 5V - HC-SR04 compatible - RCWL-1601" (https://www.adafruit.com/product/4007) For detecting obstacles
 
-## Development
+## Iteration 1 - A simple robot car
 
-### Part 1: A simple robot car
+In this part, we will build a simple robot car using ESP32. The robot car will have two wheels and two motors. The robot car will be controlled using a web interface that is hosted on the ESP web server. 
 
-In this part, we will build a simple robot car using ESP32.
+### Hardware and Circuit Setup
+The hardware needed for this part can be found in the "RoboCar Equipment List" section, and can be purchased from Adafruit. The hardware setup for this part is as follows:
 
-### Part 2: A robot car with obstacle detection
+Start by assembling the robot car using the "Mini 3-Layer Round Robot Chassis Kit" with the instructions provided in the kit at https://learn.adafruit.com/tri-layer-mini-round-robot-chassis-kit?view=all# 
 
-### Part 3: A robot car with obstacle detection and visual output(LEDs) and sound output(Buzzer)
+Parts included in the kit (Adafruit 2024)
+<img src="./imgs/parts.jpg" />
+
+Summary of the instructions:
+
+1. Screw the two black panels onto the motors as shown in the image below (O'Brien-Carelli 2024).
+
+<p align="center">
+    <img src="./imgs/motors.png" width="60%" />
+</p>
+
+2. Put the rubber treads on the wheels and attach the wheels to the motors as shown in the image below (O'Brien-Carelli 2024).
+
+<p align="center">
+    <img src="./imgs/wheels.png" width="60%" />
+</p>
+
+3. Attach the white free spinning wheels and brass standoffs to the chassis, then fit the assembled wheels to it as shown in the image below (O'Brien-Carelli 2024).
+
+<p align="center">
+    <img src="./imgs/chassis.png" width="60%" />
+</p>
+
+4. Place the next layer of the chassis on top of the motors and secure it with the screws as shown in the image below (O'Brien-Carelli 2024).
+
+<p align="center">
+    <img src="./imgs/chassis2.png" width="50%" />
+</p>
+
+5. Place the Batteries in the battery holder and place the battery holder on the top layer of the chassis, finally secure it with another layer of the chassis as shown in the image below (Cooper 2024).
+
+<p align="center">
+    <img src="./imgs/chassis3.png" width="50%" />
+</p>
+
+
+6. Using the breadboard, attach ESP32 and the motor driver feather wing to the robot car. Connect the wires as shown in the picture below by Cooper (2024). Make sure all the connections are secure and correct.
+
+<p align="center">
+    <img src="./imgs/final.png" width="60%" />
+</p>
+
+### Software 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Iteration 2 - A robot car with obstacle detection
+In this part, we will add an ultrasonic sensor to the robot car to detect obstacles. The sensor will detect the distance of any
+obstacles in front of the robot car and send the information to the ESP32. 
+
+### Hardware and Circuit Setup
+
+### Software
+
+## Iteration 3 - A robot car with obstacle detection and visual output(LEDs)
+In this part, we will add LEDs to the robot car to give visual output. The robot car will have a green LED to signify that the robot car has no obstacles in front of it and is safe to move forward. The robot car will have a red LED to signify that the robot car has obstacles in front of it and is not safe to move forward.
+
+
 
 ## Future Work
+ 
+Enhancements to the RoboCar can be made in the following ways:
+
+- Add a buzzer to give an audible alert when the robot car is too close to an obstacle for improved alerting.
+- Add a camera to the robot car to stream video to the web interface for live viewing.
+- Add additonal aesthetic and practical features to the robot car such as headlights that can be controlled from the web interface.
+
 
 ## References
 
-```
+Adafruit (2024). "Mini 3-Layer Round Robot Chassis Kit". Adafruit. https://www.adafruit.com/product/3244
 
-```
+O'Brien-Carelli, C. (2024). "Tri-Layer Mini Round Robot Chassis Kit". Adafruit. https://learn.adafruit.com/tri-layer-mini-round-robot-chassis-kit?view=all#
+
+Cooper, T. (2024). "AdaBox 002". Adafruit. https://learn.adafruit.com/adabox002/assembling-your-robot
+
