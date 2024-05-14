@@ -69,14 +69,14 @@ Summary of the instructions:
 5. Place the Batteries in the battery holder and place the battery holder on the top layer of the chassis, finally secure it with another layer of the chassis as shown in the image below (Cooper 2024).
 
 <p align="center">
-    <img src="./imgs/chassis3.png" width="50%" />
+    <img src="./imgs/chassis3.png" width="45%" />
 </p>
 
 
 6. Using the breadboard, attach ESP32 and the motor driver feather wing to the robot car. Connect the wires as shown in the picture below by Cooper (2024). Make sure all the connections are secure and correct.
 
 <p align="center">
-    <img src="./imgs/final.png" width="60%" />
+    <img src="./imgs/final.png" width="45%" />
 </p>
 
 ### Software 
