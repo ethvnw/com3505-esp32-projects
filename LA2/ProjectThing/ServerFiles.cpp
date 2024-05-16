@@ -3,40 +3,50 @@
 const char HTML_INDEX[] = R"(
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Robot Car</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <h1>Robot Car</h1>
-    <div class="connection-status">
-        <span>•</span>
-        <p class="connection-text">No connection</p>
-    </div>
-
-    <p id="distance">Distance to obstacle in front: </p>
-    
-    <div class="controls">
-        <div class="button-group">
-            <button id="left" title="Left">˂</button>
-            <button id="right" title="Right">˃</button>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Robot Car</title>
+        <link rel="stylesheet" href="style.css" />
+    </head>
+    <body>
+        <h1>Robot Car</h1>
+        <div class="connection-status">
+            <span>•</span>
+            <p class="connection-text">No connection</p>
         </div>
-        
-        <div class="button-group">
-            <button id="backward" title="Backward"></button>
-            <button id="forward" title="Forward"></button>
-        </div>
-    </div>
 
-    <script src="control.js"></script>
-</body>
+        <p id="distance">Distance to obstacle in front:</p>
+
+        <div class="speed-control">
+            <input type="range" name="speed" id="speed" min="1" max="255">
+            <div class="speed-value-container">
+                <label for="speed" id="speed-value">128</label>
+                <p>Speed</p>
+            </div>
+        </div>
+
+        <div class="controls">
+            <div class="button-group">
+                <button id="left" title="Left">˂</button>
+                <button id="right" title="Right">˃</button>
+            </div>
+
+            <div class="button-group">
+                <button id="backward" title="Backward"></button>
+                <button id="forward" title="Forward"></button>
+            </div>
+        </div>
+
+        <script src="control.js"></script>
+    </body>
 </html>
 )";
 
 const char CSS_STYLE[] = R"(
-*, *::before, *::after {
+*,
+*::before,
+*::after {
     box-sizing: border-box;
 }
 
@@ -83,6 +93,41 @@ body {
     }
 }
 
+.speed-control {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    left: 1rem;
+    top: 10%;
+}
+
+#speed-value {
+    display: inline-block;
+    width: 3rem;
+    padding: 0.5rem;
+    border: 0.15rem solid hsl(0, 0%, 40%);
+    border-radius: 0.5rem;
+    background: hsl(0, 0%, 20%);
+    text-align: center;
+}
+
+#speed {
+    writing-mode: vertical-lr;
+    direction: rtl;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+.speed-value-container {
+    display: none;
+}
+
+.speed-control:hover .speed-value-container,
+.speed-control:active .speed-value-container {
+    display: block;
+}
+
 .controls {
     display: flex;
     justify-content: space-between;
@@ -101,14 +146,15 @@ button {
     gap: 1.5rem;
 }
 
-#forward, #backward {
+#forward,
+#backward {
     background: repeating-linear-gradient(
-        transparent,
-        transparent 10px,
-        hsla(0, 0%, 100%, 0.6) 5px,
-        hsla(0, 0%, 100%, 0.5) 20px
-    ),
-    linear-gradient(to bottom, #a9a9a9 0%, #696969 100%);
+            transparent,
+            transparent 10px,
+            hsla(0, 0%, 100%, 0.6) 5px,
+            hsla(0, 0%, 100%, 0.5) 20px
+        ),
+        linear-gradient(to bottom, #a9a9a9 0%, #696969 100%);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
     border-radius: 0.1rem 0.1rem 0.5rem 0.5rem;
     padding: 2.5rem;
@@ -118,55 +164,63 @@ button {
     padding-block: 4rem;
 }
 
-#forward:hover, #backward:hover{
+#forward:hover,
+#forward:active,
+#backward:hover,
+#backward:active {
     background: repeating-linear-gradient(
-        transparent,
-        transparent 10px,
-        rgba(255, 255, 255, 0.3) 5px,
-        rgba(255, 255, 255, 0.5) 20px
-    ),
-    linear-gradient(to bottom, #696969 0%, #a9a9a9 100%);
+            transparent,
+            transparent 10px,
+            rgba(255, 255, 255, 0.3) 5px,
+            rgba(255, 255, 255, 0.5) 20px
+        ),
+        linear-gradient(to bottom, #696969 0%, #a9a9a9 100%);
 }
 
-#left, #right {
+#left,
+#right {
     border: 0.15rem solid hsl(0, 0%, 40%);
-    border-radius: 30%;
+    border-radius: 0.5rem;
     font-size: 1.5rem;
     color: hsl(0, 0%, 90%);
     background: transparent;
 }
 
-#left:hover, #right:hover {
+#left:hover,
+#left:active,
+#right:hover,
+#right:active {
     background: hsl(0, 0%, 20%);
 }
 )";
 
 const char JS_CONTROL[] = R"(
-var socket = new WebSocket("ws://" + window.location.hostname + "/ws");
+const socket = new WebSocket("ws://192.168.4.1/ws");
 var distance = Number.MAX_SAFE_INTEGER;
 
-socket.onopen = function(e) {
+socket.onopen = (e) => {
     document.querySelector(".connection-text").textContent = "Connected";
     document.querySelector(".connection-status span").style.color = "lightgreen";
 };
 
-socket.onclose = function(e) {
+socket.onclose = (e) => {
     document.querySelector(".connection-text").textContent = "No connection";
     document.querySelector(".connection-status span").style.color = "red";
 };
 
-socket.onmessage = function(e) {
+socket.onmessage = (e) => {
     distance = Number(e.data.trim());
 
     if (distance < 20) {
-        document.getElementById("distance").textContent = "Obstacle in front too close, cannot move";
+        document.getElementById("distance").textContent =
+            "Obstacle in front too close, cannot move";
     } else {
-        document.getElementById("distance").textContent = "Distance to obstacle in front: " + distance + " cm";
+        document.getElementById("distance").textContent =
+            "Distance to obstacle in front: " + distance + " cm";
     }
 };
 
-
-function sendCommand(command) { 
+const sendCommand = (command) => {
     if (command === "forward" && distance < 20) {
         command = "stop";
     }
@@ -174,38 +228,37 @@ function sendCommand(command) {
     if (socket.readyState === WebSocket.OPEN) {
         socket.send(command);
     }
-}
-
+};
 
 var commands = ["forward", "backward", "left", "right"];
-commands.forEach(function(command) {
+commands.forEach((command) => {
     var button = document.getElementById(command);
 
-    button.addEventListener("mousedown", function(e) {
+    button.addEventListener("mousedown", (e) => {
         e.preventDefault();
         sendCommand(command);
     });
 
-    button.addEventListener("touchstart", function(e) {
+    button.addEventListener("touchstart", (e) => {
         e.preventDefault();
         sendCommand(command);
     });
 
-    button.addEventListener("mouseup", function(e) {
+    button.addEventListener("mouseup", (e) => {
         e.preventDefault();
         sendCommand("stop");
     });
 
-    button.addEventListener("touchend", function(e) {
+    button.addEventListener("touchend", (e) => {
         e.preventDefault();
         sendCommand("stop");
     });
 });
 
-
-document.addEventListener('keydown', function(e) {
+document.onkeydown = (e) => {
     e.preventDefault();
-    switch(e.which) {
+
+    switch (e.which) {
         case 37: // left
             sendCommand("left");
             break;
@@ -226,13 +279,18 @@ document.addEventListener('keydown', function(e) {
             sendCommand("backward");
             break;
 
-        default: return;
+        default:
+            return;
     }
-});
+};
 
-
-document.addEventListener('keyup', function(e) {
+document.onkeyup = (e) => {
     e.preventDefault();
     sendCommand("stop");
-});
+};
+
+document.getElementById("speed").oninput = (e) => {
+    document.getElementById("speed-value").textContent = e.target.value;
+    sendCommand("speed " + e.target.value);
+};
 )";

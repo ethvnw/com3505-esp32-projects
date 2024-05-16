@@ -8,12 +8,13 @@ AsyncWebSocket ws("/ws");
 
 const char *ssid = "RoboCar (visit 192.168.4.1)";
 int numClients = 0;
+int motorSpeed = 128;
 
 int forward(String command)
 {
-  R_MOTOR->setSpeed(200);
+  R_MOTOR->setSpeed(motorSpeed);
   R_MOTOR->run(FORWARD);
-  L_MOTOR->setSpeed(200);
+  L_MOTOR->setSpeed(motorSpeed);
   L_MOTOR->run(FORWARD);
 
   return 1;
@@ -21,9 +22,9 @@ int forward(String command)
 
 int backward(String command)
 {
-  R_MOTOR->setSpeed(200);
+  R_MOTOR->setSpeed(motorSpeed);
   R_MOTOR->run(BACKWARD);
-  L_MOTOR->setSpeed(200);
+  L_MOTOR->setSpeed(motorSpeed);
   L_MOTOR->run(BACKWARD);
 
   return 1;
@@ -31,9 +32,9 @@ int backward(String command)
 
 int left(String command)
 {
-  R_MOTOR->setSpeed(200);
+  R_MOTOR->setSpeed(motorSpeed);
   R_MOTOR->run(FORWARD);
-  L_MOTOR->setSpeed(200);
+  L_MOTOR->setSpeed(motorSpeed);
   L_MOTOR->run(BACKWARD);
 
   return 1;
@@ -41,9 +42,9 @@ int left(String command)
 
 int right(String command)
 {
-  R_MOTOR->setSpeed(200);
+  R_MOTOR->setSpeed(motorSpeed);
   R_MOTOR->run(BACKWARD);
-  L_MOTOR->setSpeed(200);
+  L_MOTOR->setSpeed(motorSpeed);
   L_MOTOR->run(FORWARD);
 
   return 1;
@@ -96,6 +97,8 @@ void onEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventType 
       String command = msg;
       delete[] msg;
 
+      Serial.println(command);
+
       if (command == "forward")
       {
         forward(command);
@@ -116,6 +119,10 @@ void onEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventType 
       {
         stop(command);
       }
+      else if (command.startsWith("speed"))
+      {
+        motorSpeed = command.substring(5).toInt();
+      }
       break;
     }
   }
@@ -130,8 +137,7 @@ void setupMotorServer()
   if (!AFMS.begin())
   {
     Serial.println("Could not find Motor Shield. Check wiring.");
-    while (1)
-      ;
+    while (1);
   }
 
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request)

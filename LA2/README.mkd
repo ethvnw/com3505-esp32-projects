@@ -1,22 +1,57 @@
-# RoboCar (ESP32)
+# COM3505 IOT: RoboCar (ESP32)
+        Ethan Watts (eawatts1@sheffield.ac.uk)
+        Mohammad Tahir Khan (mtkhan1@sheffield.ac.uk)
+    
+## Overview
 
-## Introduction
-
-This project is about building a robot car using ESP32. The robot car is equipped with an ultrasonic sensor to detect obstacles. The robot car can be controlled using a web interface that is hosted on the esp web server. The robot car has a green LED to signify that the robot car has no obstacles in front of it and is safe to move forward. The robot car has a red LED to signify that the robot car has obstacles in front of it and is not safe to move forward. 
-<!-- The robot car has a buzzer to give an audible alert when the robot car is too close to an obstacle. -->
-
-## Working RoboCar
-
-The images and video below shows a working RoboCar with obstacle detection and visual outputs.
+This project is about building a robot car using ESP32. The robot car is equipped with an ultrasonic sensor to detect obstacles. The robot car can be controlled using a web interface that is hosted on the ESP web server. The robot car has a green LED to signify that the robot car has no obstacles in front of it and is safe to move forward. The robot car has a red LED to signify that the robot car has obstacles in front of it and is not safe to move forward. 
 
 <p align="center">
     <img src="./imgs/top.jpg" width="49%" />
     <img src="./imgs/front.jpg" width="49%" />
+    <img src="./imgs/controller.png">
 </p>
 
-### Video: https://www.youtube.com/watch?v=dQw4w9WgXcQ
+Watch the car in action at: https://www.youtube.com/watch?v=2xnyY_j4Z5w
 
-## RoboCar Equipment List
+
+### Objectives
+The objectives of this project are as follows:
+
+1. Build a simple robot car using ESP32.
+2. Control the car via a hosted webpage on the ESP32's web server.
+3. Detect obstacles with an ultrasonic sensor.
+4. Provide visual feedback with LEDs.
+
+
+### Libraries
+Several libraries have been used, which are installed automatically through PlatformIO. The libraries used are as follows:
+
+- Arduino.h
+- Adafruit_MotorShield.h
+- WiFi.h
+- Wire.h
+- AsyncTCP.h
+- ESPAsyncWebServer.h>
+
+## Design
+The car was designed to be implemented in three iterations. This is to ensure the core functionality is working before new features are added. The table shows the features that were incorporated in each iteration.
+
+|Criteria|Iteration 1|Iteration 2|Iteration 3|
+|---|---|---|---|
+|Controllable motors via the motor stepper board|✅|✅|✅|
+|Locally hosted web interface|✅|x|x|
+|Use RESTful API to control the car|✅|x|x|
+|ESP32-hosted web interface|x|✅|✅|
+|Control car through an asynchronous server and a web socket|x|✅|✅|
+|Detect obstacles with an ultrasonic sensor|x|x|✅|
+|Provide visual feedback with LEDs|x|x|✅|
+|Prevent forward movement when an obstacle is detected|x|x|✅|
+
+x = Not implemented, ✅ = Implemented
+
+## Implementation
+### Equipment List
 
 - "Mini 3-Layer Round Robot Chassis Kit" (https://www.adafruit.com/product/3244)
 - "4 x AA Battery Holder with On/Off Switch" (https://www.adafruit.com/product/830)
@@ -28,84 +63,84 @@ The images and video below shows a working RoboCar with obstacle detection and v
 - "Alkaline AAA batteries - 3 pack" (https://www.adafruit.com/product/3520)
 - "Ultrasonic Distance Sensor - 3V or 5V - HC-SR04 compatible - RCWL-1601" (https://www.adafruit.com/product/4007) For detecting obstacles
 
-## Iteration 1 - A simple robot car
-
-In this part, we will build a simple robot car using ESP32. The robot car will have two wheels and two motors. The robot car will be controlled using a web interface that is hosted on the ESP web server. 
-
-### Hardware and Circuit Setup
-The hardware needed for this part can be found in the "RoboCar Equipment List" section, and can be purchased from Adafruit. The hardware setup for this part is as follows:
+### Iteration 1: Simple RESTful API and motor control
+#### Hardware
+In this part, we will build a simple robot car using ESP32. The robot car will have two wheels and two motors. The hardware needed for this part can be found in the "RoboCar Equipment List" section, and can be purchased from Adafruit. The hardware setup for this part is as follows:
 
 Start by assembling the robot car using the "Mini 3-Layer Round Robot Chassis Kit" with the instructions provided in the kit at https://learn.adafruit.com/tri-layer-mini-round-robot-chassis-kit?view=all# 
 
-Parts included in the kit (Adafruit 2024)
 <img src="./imgs/parts.jpg" />
 
-Summary of the instructions:
+| Part | Instruction |
+|---|---|
+|<img src="./imgs/motors.png"/>|1. Screw the two black panels onto the motors
+|<img src="./imgs/wheels.png"/>|2. Put the rubber treads on the wheels and attach the wheels to the motors|
+|<img src="./imgs/chassis.png"/>|3. Attach the white free spinning wheels and brass standoffs to the chassis, then fit the assembled wheels to it as shown in the image (O'Brien-Carelli 2024).
+|<img src="./imgs/chassis2.png"/>|4. Place the next layer of the chassis on top of the motors and secure it with the screws as shown in the image (O'Brien-Carelli 2024).
+|<img src="./imgs/chassis3.png"/>|5. Place the Batteries in the battery holder and place the battery holder on the top layer of the chassis, finally secure it with another layer of the chassis as shown in the image (Cooper 2024).
+|<img src="./imgs/final.png">|6. Using the breadboard, attach ESP32 and the motor driver feather wing to the robot car. Connect the wires as shown in the picture by Cooper (2024). Make sure all the connections are secure and correct.
 
-1. Screw the two black panels onto the motors as shown in the image below (O'Brien-Carelli 2024).
+#### Software
+Iteration aimed to create a robust foundation for further development. To ease the development, the web controller was created separately from the robot car's code. This involved a HTML page with buttons to control the direction of the car. This page was hosted on the development machine. JavaScript was used to send HTTP requests to the ESP32 to control the car.
 
-<p align="center">
-    <img src="./imgs/motors.png" width="60%" />
-</p>
-
-2. Put the rubber treads on the wheels and attach the wheels to the motors as shown in the image below (O'Brien-Carelli 2024).
-
-<p align="center">
-    <img src="./imgs/wheels.png" width="60%" />
-</p>
-
-3. Attach the white free spinning wheels and brass standoffs to the chassis, then fit the assembled wheels to it as shown in the image below (O'Brien-Carelli 2024).
-
-<p align="center">
-    <img src="./imgs/chassis.png" width="60%" />
-</p>
-
-4. Place the next layer of the chassis on top of the motors and secure it with the screws as shown in the image below (O'Brien-Carelli 2024).
-
-<p align="center">
-    <img src="./imgs/chassis2.png" width="50%" />
-</p>
-
-5. Place the Batteries in the battery holder and place the battery holder on the top layer of the chassis, finally secure it with another layer of the chassis as shown in the image below (Cooper 2024).
-
-<p align="center">
-    <img src="./imgs/chassis3.png" width="45%" />
-</p>
+A RESTful API was created through a simple web server that was hosted on the ESP32. The HTTP requests from the web controller were processed by the server to control the different movements. It was found that there was high latency between the requests being made and the car responding. This was due to the synchronous nature of the server. Iteration 2 aimed  to resolve this issue through a web socket and an asynchronous server.
 
 
-6. Using the breadboard, attach ESP32 and the motor driver feather wing to the robot car. Connect the wires as shown in the picture below by Cooper (2024). Make sure all the connections are secure and correct.
+### Iteration 2: Asynchronous server and web socket
+#### Hardware
+There is no additional hardware for this iteration.
 
-<p align="center">
-    <img src="./imgs/final.png" width="45%" />
-</p>
+#### Software
+To improve the latency between requests and responses, it was decided to implement an asynchronous server and a web socket. The web socket supports multiple commands to be sent to the car at the same time, allowing for a quicker response. A socket also provides a direct connection between the client and the server, remaining open until the client disconnects. This allows for real-time communication between the client and the server.
 
-### Software 
+The web controller was also migrated to the ESP32's storage. This allows for the controller to be accessed on any device by connecting to the car's WiFi access point. There is also the added benefit of network independence, as the controller is hosted on the car itself. The controller was upgraded to include a slider to control the speed of the car. This is a separate command that is sent to the car, allowing for speed to be changed when desired. 
+
+### Iteration 3: Ultrasonic sensor and LEDs
+In this part, we will add an ultrasonic sensor to the robot car to detect obstacles. The sensor will detect the distance of any obstacles in front of the robot car and send the information to the ESP32. Additionally, we will add LEDs to the robot car to provide visual feedback to the user. The green LED will signify that the robot car has no obstacles in front of it and is safe to move forward. The red LED will signify that the robot car has obstacles in front of it and is not safe to move forward.
+
+#### Hardware
+<img style="float: right; padding:1rem;" src="./imgs/sensor.jpg" width="40%">
+The hardware needed for this part can be found in the "RoboCar Equipment List" section, and can be purchased from Adafruit. The hardware setup for this part is as follows:
+
+1. Attach the ultrasonic sensor to the robot car. The ultrasonic sensor should be placed at the front of the robot car facing forward. 
+
+2. Connect the ultrasonic sensor to the ESP32. The connections are as follows:
+
+- VCC to 5V
+- GND to GND
+- Trig to GPIO A5
+- Echo to GPIO 5
+
+3. Attach the green and red LEDs to the robot car, along with the resistors, and connect them to the ESP32. The connections are as follows:
+
+- Green LED to GPIO A4
+- Red LED to GPIO A3
+
+After connecting the ultrasonic sensor and the LEDs to the ESP32, the hardware setup should look like the image.
+
+#### Software
+The final iteration aimed to add protection to the car by preventing it from moving forward when an obstacle is detected. The ultrasonic sensor constantly measures the distance in front of the car, sending the measurement as a web socket message to the client. The client processes the distance and displays it to the user. If the car is less than 20cm from the obstacle in front of it, the controller disables the forwards button. 
+
+The distance that is measured by the sensor is also used by the ESP32 to light up two LEDs. If the distance is less than 20cm, the red LED lights up. If the distance is greater than 20cm, the green LED lights up. This provides visual feedback to the user about the presence of obstacles in front of the robot car.
 
 
+## Testing 
 
+The robot car was tested manually to ensure that it was functioning correctly. The robot car was placed on a flat surface and the web interface was used to control the robot car. The following tests were conducted:
 
-
-
-
-
-
-
-
-
-
-
-
-## Iteration 2 - A robot car with obstacle detection
-In this part, we will add an ultrasonic sensor to the robot car to detect obstacles. The sensor will detect the distance of any
-obstacles in front of the robot car and send the information to the ESP32. 
-
-### Hardware and Circuit Setup
-
-### Software
-
-## Iteration 3 - A robot car with obstacle detection and visual output(LEDs)
-In this part, we will add LEDs to the robot car to give visual output. The robot car will have a green LED to signify that the robot car has no obstacles in front of it and is safe to move forward. The robot car will have a red LED to signify that the robot car has obstacles in front of it and is not safe to move forward.
-
+| Test | Expected Result | Pass/Fail |
+|---|---|---|
+|Connecting the ESP32 to the computer through the WiFi network | The ESP32 connects to the WiFi network | Pass |
+| Opening the web interface on the browser | The web interface opens and displays the controls for the robot car | Pass |
+| Pressing the forward pedal should make the robot car move forward | The robot car moves forward | Pass |
+| Pressing the reverse pedal should make the robot car move backward | The robot car moves backward | Pass |
+| Pressing the left key should make the robot car turn left | The robot car turns left | Pass |
+| Changing the velocity slider should change the speed of the robot car | The robot car moves at the specified speed | Pass |
+| The ultrasonic sensor should detect obstacles in front of the robot car | The ultrasonic sensor detects obstacles | Pass |
+| The ultrasonic sensor should send the distance of the obstacle to the ESP32 | The distance of the obstacle is displayed on the web interface | Pass |
+| On coming close to an obstacle, the red LED should light up | The red LED lights up | Pass |
+| On coming close to an obstacle, warning message should be displayed on the web interface | The warning message is displayed | Pass |
+| When there are no obstacles in front of the robot car, the green LED should light up | The green LED lights up | Pass |
 
 
 ## Future Work
@@ -113,9 +148,19 @@ In this part, we will add LEDs to the robot car to give visual output. The robot
 Enhancements to the RoboCar can be made in the following ways:
 
 - Add a buzzer to give an audible alert when the robot car is too close to an obstacle for improved alerting.
+- Add additional aesthetic and practical features to the robot car such as headlights that can be controlled from the web interface.
 - Add a camera to the robot car to stream video to the web interface for live viewing.
-- Add additonal aesthetic and practical features to the robot car such as headlights that can be controlled from the web interface.
+- Automate the robot car to move autonomously using machine learning algorithms to detect obstacles and navigate around them.
 
+## Conclusion
+
+In this project, we built a robot car using ESP32. The robot car is equipped with an ultrasonic sensor to detect obstacles, can be controlled using a web interface hosted on the ESP32's web server, and provides visual feedback with LEDs.
+
+The project was implemented in three iterations as explained in the design section. Looking back at the project, we were able to achieve all the objectives that were set out at the beginning of the project. The approach of breaking down the project into iterations helped in analysing the progress of the project and making improvements at each stage. The project was a success and the robot car was able to perform all the tasks that were set out for it.
+
+Working on such a complex project was by no means easy. There were challenges along the way such as setting up the hardware, connecting the components, especially the ultrasonic sensor, and debugging the code. We also faced challenges in employing SPIFFS to store the web controller files and mounting the file system. Due to which we were unable to store the sound files such as a buzzer to be played when the robot car detects an obstacle. However, we were able to store the contents of the HTML, CSS, and JS files as strings in the code. The audio alert feature would be a great addition to the project and would enhance the user experience, hence, we will conduct more investigation and experiments to implement this feature in the future.
+
+Even after facing many challenges, with perseverance and hard work, we were able to produce a working robot car that met the objectives of the project. The project was a great learning experience and helped in understanding the working of the ESP32. Looking forward, the project can be further enhanced by adding more features to the robot car such as a buzzer for audible alerts, a camera for live streaming, and machine learning algorithms for autonomous navigation. The project would benefit us in understanding more about robotics and IOT and help in building more advanced projects in the future.
 
 ## References
 
