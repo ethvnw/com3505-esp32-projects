@@ -109,7 +109,7 @@ The hardware needed for this part can be found in the "RoboCar Equipment List" s
 - GND to GND
 - Trig to GPIO A5
 - Echo to GPIO 5
-s
+
 3. Attach the green and red LEDs to the robot car, along with the resistors, and connect them to the ESP32. The connections are as follows:
 
 - Green LED to GPIO A4
