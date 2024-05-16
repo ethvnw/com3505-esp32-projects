@@ -130,11 +130,12 @@ The robot car was tested manually to ensure that it was functioning correctly. T
 
 | Test | Expected Result | Pass/Fail |
 |---|---|---|
-|Connecting the ESP32 to the computer through the WiFi network | The ESP32 connects to the WiFi network | Pass |
+|Connecting the ESP32 to the computer through the WiFi network | The ESP32 connects through the WiFi network | Pass |
 | Opening the web interface on the browser | The web interface opens and displays the controls for the robot car | Pass |
 | Pressing the forward pedal should make the robot car move forward | The robot car moves forward | Pass |
 | Pressing the reverse pedal should make the robot car move backward | The robot car moves backward | Pass |
 | Pressing the left key should make the robot car turn left | The robot car turns left | Pass |
+| Pressing the right key should make the robot car turn right | The robot car turns right | Pass |
 | Changing the velocity slider should change the speed of the robot car | The robot car moves at the specified speed | Pass |
 | The ultrasonic sensor should detect obstacles in front of the robot car | The ultrasonic sensor detects obstacles | Pass |
 | The ultrasonic sensor should send the distance of the obstacle to the ESP32 | The distance of the obstacle is displayed on the web interface | Pass |
