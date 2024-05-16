@@ -35,7 +35,7 @@ Several libraries have been used, which are installed automatically through Plat
 - ESPAsyncWebServer.h>
 
 ## Design
-The car was designed to be implemented in three iterations. This is to ensure the core functionality is working before new features are added. The table shows the features that were incorporated in each iteration.
+The car was designed to be implemented in three iterations. This is to ensure the core functionality is working before new features are added. The table shows the features that were incorporated in each iteration. Additionally, the Robocar was evaluated through manual testing to ensure it works as expected (more in Testing section later).
 
 |Criteria|Iteration 1|Iteration 2|Iteration 3|
 |---|---|---|---|
