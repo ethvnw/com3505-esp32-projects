@@ -130,7 +130,7 @@ The robot car was tested manually to ensure that it was functioning correctly. T
 
 | Test | Expected Result | Pass/Fail |
 |---|---|---|
-|Connecting the ESP32 to the computer through the WiFi network | The ESP32 connects through the WiFi network | Pass |
+|Connecting the computer to ESP through the WiFi network | The computer connects to ESP through the WiFi network | Pass |
 | Opening the web interface on the browser | The web interface opens and displays the controls for the robot car | Pass |
 | Pressing the forward pedal should make the robot car move forward | The robot car moves forward | Pass |
 | Pressing the reverse pedal should make the robot car move backward | The robot car moves backward | Pass |
