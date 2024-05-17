@@ -1,3 +1,7 @@
+/**
+ * Controls the ultrasonic sensor
+ */
+
 #include "ProjectThing.h"
 
 volatile bool timerFired = false;
@@ -7,11 +11,19 @@ volatile long distance = 0;
 
 hw_timer_t *timer = NULL;
 
+/**
+ * Called when the timer fires.
+ */
 void IRAM_ATTR onTimer()
 {
     timerFired = true;
 }
 
+/**
+ * Called when the echo pin changes state.
+ * If the echo pin is high, the start time is recorded.
+ * If the echo pin is low, the end time is recorded and the distance is calculated.
+ */
 void IRAM_ATTR echoPinISR()
 {
     if (digitalRead(echoPin) == HIGH)
@@ -26,6 +38,9 @@ void IRAM_ATTR echoPinISR()
     }
 }
 
+/**
+ * Sends a trigger signal to the ultrasonic sensor.
+ */
 void getDistance()
 {
     attachInterrupt(digitalPinToInterrupt(echoPin), echoPinISR, CHANGE);
@@ -37,6 +52,9 @@ void getDistance()
     digitalWrite(trigPin, LOW);
 }
 
+/**
+ * Sets up the ultrasonic sensor.
+ */
 void setupUltrasonicSensor()
 {
     timer = timerBegin(0, 80, true);
@@ -45,6 +63,9 @@ void setupUltrasonicSensor()
     timerAlarmEnable(timer);
 }
 
+/**
+ * Loops the ultrasonic sensor.
+ */
 void loopUltrasonicSensor()
 {
     if (timerFired)
@@ -62,6 +83,7 @@ void loopUltrasonicSensor()
             digitalWrite(redLED, LOW);
         }
 
+        // Sending the distance to the client
         ws.textAll(String(distance));
         timerFired = false;
     }

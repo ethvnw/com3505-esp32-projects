@@ -1,3 +1,7 @@
+/**
+ * Handles the motor control server for the RoboCar project.
+ */
+
 #include "ProjectThing.h"
 
 Adafruit_MotorShield AFMS = Adafruit_MotorShield();
@@ -10,6 +14,10 @@ const char *ssid = "RoboCar (visit 192.168.4.1)";
 int numClients = 0;
 int motorSpeed = 128;
 
+/**
+ * Moves the car forward.
+ * @param command The command received from the client.
+ */
 int forward(String command)
 {
   R_MOTOR->setSpeed(motorSpeed);
@@ -20,6 +28,10 @@ int forward(String command)
   return 1;
 }
 
+/**
+ * Moves the car backward.
+ * @param command The command received from the client.
+ */
 int backward(String command)
 {
   R_MOTOR->setSpeed(motorSpeed);
@@ -30,6 +42,10 @@ int backward(String command)
   return 1;
 }
 
+/**
+ * Turns the car left.
+ * @param command The command received from the client.
+ */
 int left(String command)
 {
   R_MOTOR->setSpeed(motorSpeed);
@@ -40,6 +56,10 @@ int left(String command)
   return 1;
 }
 
+/**
+ * Turns the car right.
+ * @param command The command received from the client.
+ */
 int right(String command)
 {
   R_MOTOR->setSpeed(motorSpeed);
@@ -50,6 +70,10 @@ int right(String command)
   return 1;
 }
 
+/**
+ * Stops the car moving.
+ * @param command The command received from the client.
+ */
 int stop(String command)
 {
   R_MOTOR->setSpeed(0);
@@ -60,11 +84,24 @@ int stop(String command)
   return 1;
 }
 
+/**
+ * Handles websocket events for motor control.
+ *
+ * @param server The WebSocket server.
+ * @param client The WebSocket client that triggered the event.
+ * @param type The type of the event.
+ * @param arg Additional argument provided with the event.
+ * @param data The data received with the event.
+ * @param len The length of the data received.
+ *
+ */
 void onEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventType type, void *arg, uint8_t *data, size_t len)
 {
   switch (type)
   {
+  // Client has connected
   case WS_EVT_CONNECT:
+    // Prevents more than one client from connecting
     if (numClients == 0)
     {
       Serial.printf("[%u] Connected from %s\n", client->id(), client->remoteIP().toString().c_str());
@@ -77,6 +114,7 @@ void onEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventType 
 
     break;
 
+  // Client has disconnected
   case WS_EVT_DISCONNECT:
     Serial.printf("[%u] Disconnected!\n", client->id());
     if (numClients > 0)
@@ -86,18 +124,17 @@ void onEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventType 
 
     break;
 
+  // Commands sent from the client
   case WS_EVT_DATA:
     AwsFrameInfo *info = (AwsFrameInfo *)arg;
     if (info->final && info->index == 0 && info->len == len)
     {
-      // the whole message is in a single frame and we got all of it's data
+      // Make sure the entire message is captured and null-terminated
       char *msg = new char[len + 1];
       memcpy(msg, data, len);
       msg[len] = '\0';
       String command = msg;
       delete[] msg;
-
-      Serial.println(command);
 
       if (command == "forward")
       {
@@ -128,18 +165,23 @@ void onEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventType 
   }
 }
 
+/**
+ * Sets up the async web server, attaching websocket handlers for motor control.
+ */
 void setupMotorServer()
 {
   WiFi.mode(WIFI_AP_STA);
   WiFi.softAP(ssid, NULL);
   WiFi.disconnect();
 
+  // Initialize the motor shield
   if (!AFMS.begin())
   {
     Serial.println("Could not find Motor Shield. Check wiring.");
     while (1);
   }
 
+  // Server routes
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request)
             { request->send(200, "text/html", HTML_INDEX); });
 

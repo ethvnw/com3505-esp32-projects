@@ -1,3 +1,7 @@
+/**
+ * Stores the HTML, CSS, and JavaScript files for the server.
+ */
+
 #include "ProjectThing.h"
 
 const char HTML_INDEX[] = R"(

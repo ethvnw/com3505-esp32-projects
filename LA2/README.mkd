@@ -95,6 +95,8 @@ To improve the latency between requests and responses, it was decided to impleme
 
 The web controller was also migrated to the ESP32's storage. This allows for the controller to be accessed on any device by connecting to the car's WiFi access point. There is also the added benefit of network independence, as the controller is hosted on the car itself. The controller was upgraded to include a slider to control the speed of the car. This is a separate command that is sent to the car, allowing for speed to be changed when desired. 
 
+It was also decided to limit the web socket connection to one client at a time. This prevents multiple clients from sending conflicting commands to the car. The web controller shows a visual display of the current connection to the car, allowing the user to know when they are connected. This can be seen in the image in the "Overview" section.
+
 ### Iteration 3: Ultrasonic sensor and LEDs
 In this part, we will add an ultrasonic sensor to the robot car to detect obstacles. The sensor will detect the distance of any obstacles in front of the robot car and send the information to the ESP32. Additionally, we will add LEDs to the robot car to provide visual feedback to the user. The green LED will signify that the robot car has no obstacles in front of it and is safe to move forward. The red LED will signify that the robot car has obstacles in front of it and is not safe to move forward.
 
