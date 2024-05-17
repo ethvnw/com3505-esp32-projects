@@ -35,7 +35,7 @@ Several libraries have been used, which are installed automatically through Plat
 - ESPAsyncWebServer.h>
 
 ## Design
-The car was designed to be implemented in three iterations. This is to ensure the core functionality is working before new features are added. The table shows the features that were incorporated in each iteration.
+The car was designed to be implemented in three iterations. This is to ensure the core functionality is working before new features are added. The table shows the features that were incorporated in each iteration. Additionally, the Robocar was evaluated through manual testing to ensure it works as expected (more in Testing section later).
 
 |Criteria|Iteration 1|Iteration 2|Iteration 3|
 |---|---|---|---|
@@ -101,7 +101,6 @@ It was also decided to limit the web socket connection to one client at a time. 
 In this part, we will add an ultrasonic sensor to the robot car to detect obstacles. The sensor will detect the distance of any obstacles in front of the robot car and send the information to the ESP32. Additionally, we will add LEDs to the robot car to provide visual feedback to the user. The green LED will signify that the robot car has no obstacles in front of it and is safe to move forward. The red LED will signify that the robot car has obstacles in front of it and is not safe to move forward.
 
 #### Hardware
-<img style="float: right; padding:1rem;" src="./imgs/sensor.jpg" width="40%">
 The hardware needed for this part can be found in the "RoboCar Equipment List" section, and can be purchased from Adafruit. The hardware setup for this part is as follows:
 
 1. Attach the ultrasonic sensor to the robot car. The ultrasonic sensor should be placed at the front of the robot car facing forward. 
@@ -119,6 +118,7 @@ The hardware needed for this part can be found in the "RoboCar Equipment List" s
 - Red LED to GPIO A3
 
 After connecting the ultrasonic sensor and the LEDs to the ESP32, the hardware setup should look like the image.
+<img src="./imgs/sensor.jpg" width="40%">
 
 #### Software
 The final iteration aimed to add protection to the car by preventing it from moving forward when an obstacle is detected. The ultrasonic sensor constantly measures the distance in front of the car, sending the measurement as a web socket message to the client. The client processes the distance and displays it to the user. If the car is less than 20cm from the obstacle in front of it, the controller disables the forwards button. 
@@ -132,11 +132,12 @@ The robot car was tested manually to ensure that it was functioning correctly. T
 
 | Test | Expected Result | Pass/Fail |
 |---|---|---|
-|Connecting the ESP32 to the computer through the WiFi network | The ESP32 connects to the WiFi network | Pass |
+|Connecting the computer to ESP through the WiFi network | The computer connects to ESP through the WiFi network | Pass |
 | Opening the web interface on the browser | The web interface opens and displays the controls for the robot car | Pass |
 | Pressing the forward pedal should make the robot car move forward | The robot car moves forward | Pass |
 | Pressing the reverse pedal should make the robot car move backward | The robot car moves backward | Pass |
 | Pressing the left key should make the robot car turn left | The robot car turns left | Pass |
+| Pressing the right key should make the robot car turn right | The robot car turns right | Pass |
 | Changing the velocity slider should change the speed of the robot car | The robot car moves at the specified speed | Pass |
 | The ultrasonic sensor should detect obstacles in front of the robot car | The ultrasonic sensor detects obstacles | Pass |
 | The ultrasonic sensor should send the distance of the obstacle to the ESP32 | The distance of the obstacle is displayed on the web interface | Pass |
